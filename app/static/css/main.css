@@ -6,4 +6,24 @@
 
 body{
     padding-top: 50px;
+    overflow-x: hidden;
 }
+
+.container-fluid.header-bg {
+    background-image: url("/static/images/felix-fuchs-PoPsSRju8Y8-unsplash.jpg");
+    background-size: cover;
+    background-repeat: no-repeat; 
+    /* max-width: 100%; */
+    background-position: center;
+    height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hdr-text-box {
+    background-color: rgba(0, 0, 0, 0.5); /* Opaque background color */
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+  }

@@ -52,36 +52,35 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f'User {self.email} has been added to the database'
     
-    
+  
 
+class Contact(db.Model):
+    id = db.Column(db.String, primary_key = True)
+    name = db.Column(db.String(150), nullable = False)
+    email = db.Column(db.String(200))
+    phone_number = db.Column(db.String(20))
+    address = db.Column(db.String(200))
+    user_token = db.Column(db.String, db.ForeignKey('user.token'), nullable = False)
 
-# class Contact(db.Model):
-#     id = db.Column(db.String, primary_key = True)
-#     name = db.Column(db.String(150), nullable = False)
-#     email = db.Column(db.String(200))
-#     phone_number = db.Column(db.String(20))
-#     address = db.Column(db.String(200))
-#     user_token = db.Column(db.String, db.ForeignKey('user.token'), nullable = False)
+    def __init__(self,name,email,phone_number,address,user_token, id = ''):
+        self.id = self.set_id()
+        self.name = name
+        self.email = email
+        self.phone_number = phone_number
+        self.address = address
+        self.user_token = user_token
 
-#     def __init__(self,name,email,phone_number,address,user_token, id = ''):
-#         self.id = self.set_id()
-#         self.name = name
-#         self.email = email
-#         self.phone_number = phone_number
-#         self.address = address
-#         self.user_token = user_token
+    def __repr__(self):
+        return f'The following contact has been added to the phonebook: {self.name}'
 
-#     def __repr__(self):
-#         return f'The following contact has been added to the phonebook: {self.name}'
+    def set_id(self):
+        return (secrets.token_urlsafe())
 
-#     def set_id(self):
-#         return (secrets.token_urlsafe())
+class ContactSchema(ma.Schema):
+    class Meta:
+        fields = ['id', 'name','email','phone_number', 'address']
 
-# class ContactSchema(ma.Schema):
-#     class Meta:
-#         fields = ['id', 'name','email','phone_number', 'address']
+#  This basically is another function that is part of the process of uploading our data to our database. Note that the fields must match our Contact class here. If they don't, there will be errors! 
 
-# #  This basically is another function that is part of the process of uploading our data to our database. Note that the fields must match our Contact class here. If they don't, there will be errors! 
-
-# contact_schema = ContactSchema()
-# contacts_schema = ContactSchema(many=True)
+contact_schema = ContactSchema()
+contacts_schema = ContactSchema(many=True)
