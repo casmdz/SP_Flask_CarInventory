@@ -67,38 +67,42 @@ class User(db.Model, UserMixin):
 
 # the __repr__ method prints out at the end - this will show up in our terminal/CLI eventually. 
     def __repr__(self):
-        return f'User {self.email} has been added to the database'
+        return f'Something just happened to {self.username}...'
     
+class UserSchema(ma.Schema):
+    class Meta:
+        fields = ['id', 'first_name', 'last_name', 'username', 'email', 'password']
   
-#Class for user to create accounts
-#Class of what we actually end up storing in our 'phonebook
-# class Contact(db.Model):
-#     id = db.Column(db.String, primary_key = True)
-#     name = db.Column(db.String(150), nullable = False)
-#     email = db.Column(db.String(200))
-#     phone_number = db.Column(db.String(20))
-#     address = db.Column(db.String(200))
-#     user_token = db.Column(db.String, db.ForeignKey('user.token'), nullable = False)
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
+  
+  
+class Car(db.Model):
+    id = db.Column(db.String, primary_key=True)
+    make = db.Column(db.String(150), nullable = False, default = '')
+    model = db.Column(db.String(150), nullable = False, default = '')
+    year = db.Column(db.String(20), default = '')
+    color = db.Column(db.String(150))
+    user_token = db.Column(db.String, db.ForeignKey('user.token'), nullable = False)
 
-#     def __init__(self,name,email,phone_number,address,user_token, id = ''):
-#         self.id = self.set_id()
-#         self.name = name
-#         self.email = email
-#         self.phone_number = phone_number
-#         self.address = address
-#         self.user_token = user_token
-
-#     def __repr__(self):
-#         return f'The following contact has been added to the phonebook: {self.name}'
-
-#     def set_id(self):
-#         return (secrets.token_urlsafe())
-
-# class ContactSchema(ma.Schema):
-#     class Meta:
-#         fields = ['id', 'name','email','phone_number', 'address']
-
-#  This basically is another function that is part of the process of uploading our data to our database. Note that the fields must match our Contact class here. If they don't, there will be errors! 
-
-# contact_schema = ContactSchema()
-# contacts_schema = ContactSchema(many=True)
+    def __init__(self, make='', model='', year='', color=None, user_token='', id=''):
+        self.id = self.set_id()
+        self.make = make
+        self.model = model
+        self.year = year
+        self.color = color
+        self.user_token = user_token
+        
+    def __repr__(self):
+        return f'This car {self.id} has been added to the collection.'
+    
+    def set_id(self):
+        return (secrets.token_urlsafe())
+    #its Base64 encoded
+    
+class CarSchema(ma.Schema):
+    class Meta:
+        fields = ['id', 'make', 'model', 'year', 'color']
+  
+car_schema = CarSchema()
+cars_schema = CarSchema(many=True)

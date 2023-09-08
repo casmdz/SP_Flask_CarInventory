@@ -2,16 +2,12 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, IntegerField, ValidationError
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 
-
 from models import User
 
 # class UserLoginForm(FlaskForm):
 #     email = StringField('Email', validators = [DataRequired(), Email()])
 #     password = PasswordField('Password', validators = [DataRequired()])
 #     submit_button = SubmitField()
-    
-# jinja2.exceptions.UndefinedError: 'forms.UserRegistrationForm object' has no attribute 'username_or_email'
-# 127.0.0.1 - - [02/Sep/2023 17:44:55] "GET /signup HTTP/1.1" 500 -
     
 class UserLoginForm(FlaskForm):
     username_or_email = StringField('Username or Email', validators=[DataRequired()])
@@ -27,11 +23,17 @@ class UserLoginForm(FlaskForm):
         #INFO
         #https://betterprogramming.pub/a-detailed-guide-to-user-registration-login-and-logout-in-flask-e86535665c07
         # https://wtforms.readthedocs.io/en/3.0.x/
+        # Note there is a distinction between this and DataRequired in that InputRequired looks that form-input data was provided, and DataRequired looks at the post-coercion data.
         
 class UserRegistrationForm(FlaskForm):
+    first_name = StringField('First Name', validators=[DataRequired()])
+    last_name = StringField('Last Name', validators=[DataRequired()])
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit_button = SubmitField('Sign Up')
 # forms --> app\templates\forms.html
+# it doesnt have the name fields!! 
+# first_name = db.Column(db.String(150), nullable=True, default='')
+# last_name = db.Column(db.String(150), nullable = True, default = '')

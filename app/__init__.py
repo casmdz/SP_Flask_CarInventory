@@ -30,7 +30,7 @@ login_manager.login_view = 'signin'
 
 ma.init_app(app)
 
-migrate = Migrate(app, root_db)
+migrate = Migrate(app, root_db, compare_type=True)
 
 app.json_encoder = JSONEncoder
 
