@@ -54,6 +54,7 @@ SQLAlchemy==2.0.20
 stack-data==0.6.2
 typing_extensions==4.7.1
 virtualenv
-Werkzeug==2.3.7
+Werkzeug
+# ==2.3.7
 WTForms==3.0.1
 zipp==3.16.2
