@@ -13,7 +13,7 @@ dnspython
 email-validator==2.0.0.post2
 executing==1.2.0
 filelock==3.9.0
-Flask==2.3.3
+Flask==2.2.5
 Flask-Cors==4.0.0
 Flask-Login==0.6.2
 flask-marshmallow==0.15.0
