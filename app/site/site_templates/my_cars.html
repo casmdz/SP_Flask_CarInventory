@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %} 
+    <section class="bg-dark text-light text-center shadow mb-20">
+        <div class="container p-5 bg-dark">
+            <div class="row">
+                <div class="d-md-flex bg-dark align-items-center justify-content-evenly">
+                    <h1 class="col text-center">{{ current_user.first_name}} {{ current_user.last_name}}'s Cars</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="text-center p-5">
+        <div class="container p-10">
+            <div class="row"><br>
+                <table class="table table-striped p-5">
+                    <thead>
+                        <tr>
+                            <th>Make</th>
+                            <th>Model</th>
+                            <th>Year</th>
+                            <th>Color</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for car in user_cars %}
+                            <tr>
+                                <td>{{ car.make }}</td>
+                                <td>{{ car.model }}</td>
+                                <td>{{ car.year }}</td>
+                                <td>{{ car.color }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-4"></div>
+                <div class="col-3 p-10">
+                    <img src="../app/static/images/undraw_electric_car_b-7-hl.svg" class="d-flex align-items-center justify-content-center p-50 img-fluid" alt="">
+                </div>
+                <div class="col-3"></div>
+            </div>
+        </div>
+        </section>
+
+    <!-- <table>
+        <thead>
+            <tr>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Year</th>
+                <th>Color</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for car in user_cars %}
+                <tr>
+                    <td>{{ car.make }}</td>
+                    <td>{{ car.model }}</td>
+                    <td>{{ car.year }}</td>
+                    <td>{{ car.color }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table> -->
+{% endblock %}
