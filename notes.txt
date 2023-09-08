@@ -1,0 +1,28 @@
+my_flask_app/
+│
+├── app/
+│   ├── __init__.py
+│   ├── api/
+│       └──routes.py
+│   ├── authentication/
+│       ├──auth_temp/
+│           ├── login.html
+│           └── logout.html
+│       └──routes.py
+│   ├── site/
+│       └── site_templates/
+│           ├── index.html
+│           ├── my_cars.html
+│           └── profile.html
+│   └── templates/
+│       ├── base.html
+│       └── forms.html
+│
+│
+├── my_venv/
+├── .env
+├── config.py
+├── forms.py
+├── helpers.py
+├── models.py
+└── requirements.txt
