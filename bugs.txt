@@ -185,3 +185,6 @@ uninstalled
 ipykernel and ipython
  jupyter-core, python-dateutil, tornado, traitlets 
 matplotlib-inline-0.1.6 prompt-toolkit   wcwidth
+
+Sep 7 11:51:33 PM    Downloading MarkupSafe-2.1.3-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (25 kB)
+Sep 7 11:51:33 PM  ERROR: Could not find a version that satisfies the requirement marshmallow==3.20.1 (from -r requirements.txt (line 34)) (from versions:  3.19.0)
