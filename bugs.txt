@@ -1,0 +1,166 @@
+1
+  File "C:\Users\treeo\Desktop\CODING TEMPLE SELF PACE\Module 5 Flask\Flask_CarInventoryApp\app\templates\forms.html", line 6, in top-level template code
+    {{ form.email.label }}
+  File "C:\Program Files\Python311\Lib\site-packages\jinja2\environment.py", line 485, in getattr
+    return getattr(obj, attribute)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'forms.UserLoginForm object' has no attribute 'email'
+127.0.0.1 - - [02/Sep/2023 00:39:48] "GET /signin HTTP/1.1" 500 -
+
+
+
+so i just init the flask db 
+and migrated and upgraded, let me try to run this 
+
+================================================================
+2
+
+Flask-login continues not to work 
+
+https://flask-login.readthedocs.io/en/latest/
+
+Alright i think it works, the underline is gone
+created demo.py 
+import sys
+
+print(sys.executable)
+
+# # (my_venv) C:\Users\treeo\Desktop\CODING TEMPLE SELF PACE\Module 5 Flask\Flask_CarInventoryApp>"c:/Users/treeo/Desktop/CODING TEMPLE SELF PACE/Module 5 Flask/Flask_CarInventoryApp/my_venv/Scripts/python.exe" "c:/Users/treeo/Desktop/CODING TEMPLE SELF PACE/Module 5 Flask/Flask_CarInventoryApp/demo.py"
+# c:\Users\treeo\Desktop\CODING TEMPLE SELF PACE\Module 5 Flask\Flask_CarInventoryApp\my_venv\Scripts\python.exe
+
+
+C:\Users\treeo\Desktop\CODING TEMPLE SELF PACE\Module 5 Flask\Flask_CarInventoryApp>my_venv\Scripts\python.exe -m pip install flask_login    
+
+source: https://stackoverflow.com/questions/74973155/unable-to-import-flask-login-despite-being-installed
+
+
+================================================================
+3
+
+           ^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'forms.UserLoginForm object' has no attribute 'email'
+127.0.0.1 - - [02/Sep/2023 17:40:06] "GET /signin HTTP/1.1" 500 -
+
+FIXED  
+
+================================================
+4
+
+jinja2.exceptions.UndefinedError: 'forms.UserRegistrationForm object' has no attribute 'username_or_email'
+127.0.0.1 - - [02/Sep/2023 17:44:55] "GET /signup HTTP/1.1" 500 -
+
+FIXED ... there was a typo... 
+
+
+================================================
+5
+
+So I set up the table and forms wrong again
+Elephant SQL is showing me username and email data in switched positions
+Also I think that the SIGN IN page was committing to the DB, not Sign Up
+
+In profile page, it says email = overlord
+
+overlord , pw: water
+>>> User overlord has been added to the database water 
+???
+overlord token: 57033192e4f2e992989067aafb3dbd929a61ae999f59295c 
+id: 3ef4c035-9f14-44d1-b872-5329c08192b7
+g_auth_verify: false ??
+
+okay, first let me test out insomnia, then we'll fix this stuff
+
+6...
+
+
+# File "C:......\app\authentication\routes.py", line 140, in update_user
+#     user.first_name = request.json['first_name']
+#     ^^^^^^^^^^^^^^^
+# AttributeError: 'NoneType' object has no attribute 'first_name'
+# 127.0.0.1 - - [03/Sep/2023 05:06:24] "PUT /users/57033192e4f2e992989067aafb3dbd929a61ae999f59295c HTTP/1.1" 500 -
+
+# ITS BECAUSE I WROTE THE ID WRONG!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+fixing log in  
+
+7 
+@auth.route('/signin', methods = ['GET', 'POST'])
+def signin():
+    form = UserLoginForm()
+    
+    try:
+        if request.method == 'POST' and form.validate():
+            logged_user = User.query.filter_by(username=form.username_or_email.data).first() or User.query.filter_by(email=form.username_or_email.data).first()
+            # unused  code 
+            # if logged_user and user.check_password(form.password.data):
+            # old code 
+            #logged_user = User.query.filter(User.email == email).first()   
+            password = form.password.data
+            print(logged_user,password)
+            
+            if logged_user: 
+                if check_password_hash(logged_user.password, password):
+                    login_user(logged_user)
+                    flash('successfully signed in to see the car inventory site', 'auth-sucess')
+                    return redirect(url_for('site.profile'))
+                else:
+                    flash('Incorrect password. Please try again.', 'auth-failed')
+            else:
+                flash('User doesnt exist.', 'auth-failed')
+                return redirect(url_for('auth.signin'))
+            return redirect(url_for('auth.signin'))
+    except:
+        raise Exception('Invalid Form Data: Please Check your Form')
+    return render_template('sign_in.html', form=form)
+
+================================
+8
+Trying to add cars via insomnia 
+
+500 INTERNAL SERVER ERROR940
+
+
+
+127.0.0.1 - - [05/Sep/2023 18:01:39] "POST /api/cars HTTP/1.1" 500 -
+65b66beab1b2691bcf4678cb3c8c0874f7dfd8b2d833ac06
+Something just happened to new-hope...
+BIG TESTER: 65b66beab1b2691bcf4678cb3c8c0874f7dfd8b2d833ac06
+[2023-09-05 18:02:06,092] ERROR in app: Exception on /api/cars [POST]
+Traceback (most recent call last):
+
+....
+
+  File "C:\Program Files\Python311\Lib\site-packages\sqlalchemy\engine\default.py", line 921, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.DataError: (psycopg2.errors.StringDataRightTruncation) value too long for type character varying(20)
+
+[SQL: INSERT INTO car (id, make, model, year, color, user_token) VALUES (%(id)s, %(make)s, %(model)s, %(year)s, %(color)s, %(user_token)s)]
+[parameters: {'id': 'gY9QCbMlh2Wyc8VqC4DVuLHlYGCaUcFoYMAIesq6nkM', 'make': 'Toyota', 'model': 'Camry', 'year': '2020', 'color': 'Blue', 'user_token': '65b66beab1b2691bcf4678cb3c8c0874f7dfd8b2d833ac06'}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+127.0.0.1 - - [05/Sep/2023 18:02:06] "POST /api/cars HTTP/1.1" 500 -
+
+
+So i changed the db String limit in my Car Model and the __init__ user_token no longer = ''
+try to run POST
+New error 
+
+  File "C:\Users\treeo\Desktop\CODING TEMPLE SELF PACE\Module 5 Flask\Flask_CarInventoryApp\helpers.py", line 33, in decorated
+    return our_flask_function(current_user_token, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\treeo\Desktop\CODING TEMPLE SELF PACE\Module 5 Flask\Flask_CarInventoryApp\app\api\routes.py", line 25, in create_car
+    car = Car(make,model,year,color,user_token=user_token)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: __init__() got multiple values for argument 'user_token'
+127.0.0.1 - - [05/Sep/2023 18:16:01] "POST /api/cars HTTP/1.1" 500 -
+
+
+im going to delete the migrations folder i think 
+
+ compare_type=True
+
+
+ works maybe
