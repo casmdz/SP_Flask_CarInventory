@@ -47,7 +47,7 @@ pytest==7.3.1
 python-dateutil==2.8.2
 python-dotenv
 python-editor==1.0.4
-pywin32==306
+# pywin32==306
 pyzmq==25.1.1
 six==1.16.0
 SQLAlchemy==2.0.20
